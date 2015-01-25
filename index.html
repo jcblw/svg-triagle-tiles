@@ -1,0 +1,95 @@
+<!doctype html>
+<meta charset="utf8" />
+<title>SVG Patterns</title>
+<style type="text/css">
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; height: 100%; background: powderblue; }
+    svg {
+        width: 100%;
+        height: 100%;
+        min-height: 100%;
+    }
+    path {
+        fill: skyblue;
+        stroke-width: 1px;
+        stroke: skyblue;
+    }
+</style>
+<svg xmlns="http://www.w3.org/2000/svg" ></svg>
+<script src="bundle.js"></script>
+<script>
+    var vsvg = require( 'vsvg' ),
+        paths = require( 'vsvg-paths' ),
+        path = vsvg.path,
+        g = vsvg.g, 
+        svg = vsvg.mount( document.getElementsByTagName('svg')[0] ),
+        pattern = paths.encode( [ // triangle 
+            { x: 0, y: 0 },
+            { x: 100, y: 100 },
+            { x: 200, y: 0 },
+            { x: 180, y: 0 },
+            { x: 100, y: 80 },
+            { x: 40, y: 20 },
+            { x: 100, y: 20 },
+            { y: 40 },
+            { x: 80 },
+            { x: 100, y: 60 },
+            { x: 140, y: 20 },
+            { x: 120 },
+            { y: 0 }, 
+            {}
+        ] ),
+        xamount = Math.floor( window.innerWidth / 100 ) + 3,
+        yamount = Math.floor( window.innerHeight / 100 ) + 1;
+
+
+    function createGrouping( position ) {
+        var nodes = [],
+            rotation = 0,
+            x,
+            y;
+
+        for( var i = 0; i < xamount; i += 1 ) {
+          x = i * (rotation?-100:100) - (rotation?-100:0);
+          y = position.y * (rotation?-1:1);
+          nodes.push( 
+            createGroup( pattern, { 
+                deg: rotation, x: x, y: y } ) );
+          if(rotation){
+            rotation = 0;
+          } else {
+            rotation = 180;
+          }
+        }
+
+        return nodes;
+    }
+
+    function createGroup( tile, position ) {
+        return (  
+            g( { transform: 'rotate(' + position.deg + ', 50, 50 ) translate(' + position.x + ',' + position.y + ')' }, 
+                path( { d: tile } ) )
+        )
+    }
+
+    function createLine( y, index ) {
+        var line = createGrouping( { y: y } ),
+            attrs = {};
+        
+        if ( index % 2 ) {
+            attrs.transform = 'translate(-100,0)';        
+        }
+
+        line.unshift( attrs );
+        return g.apply( null, line );
+    }
+
+    var lines = [];
+
+    for( var z = 0; z < yamount; z += 1 ) {
+        lines.push( createLine( z * 100, z ) );
+    }
+
+    lines.forEach( svg.appendChild.bind( svg ) );
+
+</script>

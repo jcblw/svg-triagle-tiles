@@ -1,0 +1,19 @@
+{
+  "name": "svg-patterns",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "browserify -r vsvg -r vsvg-paths -o bundle.js -d",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vsvg": "^1.8.1",
+    "vsvg-paths": "^0.2.0"
+  },
+  "devDependencies": {
+    "browserify": "^8.1.1"
+  }
+}
