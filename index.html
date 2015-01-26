@@ -3,16 +3,14 @@
 <title>SVG Patterns</title>
 <style type="text/css">
     * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; height: 100%; background: powderblue; }
-    svg {
-        width: 100%;
-        height: 100%;
-        min-height: 100%;
-    }
+    html, body, svg { width: 100%; padding: 0; margin: 0; min-height: 100%; height: 100%; background: powderblue; }
     path {
-        fill: skyblue;
-        stroke-width: 1px;
+        fill: none;
+        stroke-width: 3px;
         stroke: skyblue;
+    }
+    .path-filled {
+        fill: skyblue;
     }
 </style>
 <svg xmlns="http://www.w3.org/2000/svg" ></svg>
@@ -21,22 +19,29 @@
     var vsvg = require( 'vsvg' ),
         paths = require( 'vsvg-paths' ),
         path = vsvg.path,
-        g = vsvg.g, 
+        g = vsvg.g,
         svg = vsvg.mount( document.getElementsByTagName('svg')[0] ),
-        pattern = paths.encode( [ // triangle 
+        pattern1 = paths.encode( [ // celtic sawtooth complex
             { x: 0, y: 0 },
+            { x: 200 },
+            { x: 112.5, y: 87.5 },
+            { x: 87.5, y: 62.5 },
+            { x: 112.5, y: 37.5 },
+            { x: 87.5, y: 62.5 },
+            { x: 62.5, y: 37.5 }
+        ] ),
+        pattern2 = paths.encode( [
             { x: 100, y: 100 },
-            { x: 200, y: 0 },
-            { x: 180, y: 0 },
-            { x: 100, y: 80 },
-            { x: 40, y: 20 },
-            { x: 100, y: 20 },
-            { y: 40 },
-            { x: 80 },
-            { x: 100, y: 60 },
-            { x: 140, y: 20 },
-            { x: 120 },
-            { y: 0 }, 
+            { x: 12.5, y: 12.5 },
+            { x: 162.5 },
+            { x: 137.5, y: 37.5 },
+            { x: 112.5, y: 63.5 },
+            { x: 137.5, y: 37.5 },
+            { x: 112.5, y: 12.5 },
+            { x: 88.5, y: 37.5 },
+            { x: 63.5, y: 12.5 },
+            { x: 37.5, y: 37.5 },
+            { x: 100, y: 100 },
             {}
         ] ),
         xamount = Math.floor( window.innerWidth / 100 ) + 3,
@@ -52,9 +57,9 @@
         for( var i = 0; i < xamount; i += 1 ) {
           x = i * (rotation?-100:100) - (rotation?-100:0);
           y = position.y * (rotation?-1:1);
-          nodes.push( 
-            createGroup( pattern, { 
-                deg: rotation, x: x, y: y } ) );
+          nodes.push(
+            createGroup( pattern1, pattern2, {
+                deg: rotation, x: x, y: y, scale: (rotation?-1:1) } ) );
           if(rotation){
             rotation = 0;
           } else {
@@ -65,19 +70,21 @@
         return nodes;
     }
 
-    function createGroup( tile, position ) {
-        return (  
-            g( { transform: 'rotate(' + position.deg + ', 50, 50 ) translate(' + position.x + ',' + position.y + ')' }, 
-                path( { d: tile } ) )
+    function createGroup( tile1, tile2, position ) {
+        return (
+            g( { transform: 'rotate(' + position.deg + ', 50, 50 ) translate(' + position.x + ',' + position.y + ') scale(' + position.scale + ',1)' },
+                path( { d: tile1 } ),
+                path( { d: tile2, class: 'path-filled' } )
+            )
         )
     }
 
     function createLine( y, index ) {
         var line = createGrouping( { y: y } ),
             attrs = {};
-        
+
         if ( index % 2 ) {
-            attrs.transform = 'translate(-100,0)';        
+            attrs.transform = 'translate(-100,0)';
         }
 
         line.unshift( attrs );
