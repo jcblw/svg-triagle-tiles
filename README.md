@@ -1,5 +1,7 @@
 ## VSVG patterns
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/jcblw/svg-triagle-tiles.svg)](https://greenkeeper.io/)
+
 This is a little experiment to generate a tiling pattern using [vsvg](https://github.com/jcblw/vsvg) and [vsvg-paths](https://github.com/jcblw/vsvg-paths).
 ![celtic sawtooth simple](https://raw.githubusercontent.com/jcblw/svg-triagle-tiles/master/assets/celtic-sawtooth-simple.png)
 ![celtic sawtooth complex](https://raw.githubusercontent.com/jcblw/svg-triagle-tiles/master/assets/celtic-sawtooth-complex.png)
